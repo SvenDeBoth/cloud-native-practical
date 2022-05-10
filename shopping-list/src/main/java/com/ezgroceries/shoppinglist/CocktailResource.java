@@ -2,14 +2,11 @@ package com.ezgroceries.shoppinglist;
 
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonView;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
-
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -85,6 +82,7 @@ public class CocktailResource {
         this.ingredients = ingredients;
     }
 
+
     @Override
     public String toString() {
         return "CocktailResource{" +
@@ -96,4 +94,5 @@ public class CocktailResource {
                 ", ingredients=" + ingredients +
                 '}';
     }
+
 }
