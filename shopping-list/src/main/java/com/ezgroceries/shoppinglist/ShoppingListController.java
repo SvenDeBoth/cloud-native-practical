@@ -1,6 +1,7 @@
 package com.ezgroceries.shoppinglist;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +11,66 @@ import java.util.*;
 @RestController
 public class ShoppingListController {
 
+
     @GetMapping(value = "/shopping-lists", produces = "application/json")
-    public ResponseEntity< List <ShoppingListResource>> listShoppingList(@RequestParam String search) {
-        return ResponseEntity.ok((getDummyResources()));
+    public ResponseEntity<?> listShoppingList(@RequestParam(required = false) String search) {
+        if (search != null)
+        {
+            System.out.println(" request param --> getdummyresources");
+            return ResponseEntity.ok((getDummyResources()));
+        }
+        else
+        {
+            List<ShoppingListIngredients> allShoppingIngridientsLists = new ArrayList<ShoppingListIngredients>();
+
+            for (UUID key : shoppingLists.keySet())
+            {
+                System.out.println(key + "/" + shoppingLists.get(key).getName());
+                ShoppingListResource shoppingList = shoppingLists.get(key);
+                // System.out.println(uuid);
+                ShoppingListIngredients ingredientsOverview = new ShoppingListIngredients();
+                ingredientsOverview.setShoppingListID(shoppingList.getShoppingListID());
+                // System.out.println(ingredientsOverview.getShoppingListID());
+                ingredientsOverview.setshoppingListName(shoppingList.getName());
+                // System.out.println(ingredientsOverview.getshoppingListName());
+                System.out.println(shoppingList.getCocktails().size());
+                System.out.println(CocktailController.getDummyResources().size());
+                int k=0;
+                for(int i=0;i <shoppingList.getCocktails().size();i++){
+                    // shoppingList.get(i).getCocktails() --> uuid of cocktails
+                    for (int j = 0; j < CocktailController.getDummyResources().size(); j++)
+                    {
+                        CocktailResource s = CocktailController.getDummyResources().get(j);
+                        //  System.out.println("loop1");
+                        //  System.out.println(CocktailController.getDummyResources().get(j).getCocktailId());
+                        //  System.out.println(CocktailController.getDummyResources().get(j).getIngredients().get(1).toString());
+                        // System.out.println(shoppingList.getCocktails().get(i));
+                        if (CocktailController.getDummyResources().get(j).getCocktailId().equals(shoppingList.getCocktails().get(i)))
+                        { // add all ingredients
+                            //    System.out.println("loop2");
+                            //    System.out.println();
+                            //    System.out.println(CocktailController.getDummyResources().get(j).getName());
+                            //    System.out.println(CocktailController.getDummyResources().get(j).getIngredients().size());
+                            for (int l = 0; l < CocktailController.getDummyResources().get(j).getIngredients().size(); l++)
+                            {
+                                //       System.out.println(CocktailController.getDummyResources().get(j).getIngredients().get(l).toString());
+                                ingredientsOverview.getcocktailIngredients().add(CocktailController.getDummyResources().get(j).getIngredients().get(l).toString());
+                                //      System.out.println("added");
+
+                            }
+                        }
+                    }
+
+
+                }
+                allShoppingIngridientsLists.add(ingredientsOverview);
+            }
+            System.out.println("no request param --> return all shoppingingredientslists ");
+            return ResponseEntity.ok((allShoppingIngridientsLists));
+        }
+
     }
+
     @GetMapping(value = "/shopping-lists/{uuid}", produces = "application/json")
     public ResponseEntity<ShoppingListIngredients> searchShoppingList(@PathVariable("uuid") UUID uuid) {
         // loop all coctails + ingredients , store all ingredients in ingredientsOverview
@@ -59,7 +116,7 @@ public class ShoppingListController {
         }
 
 
-        return new ResponseEntity<>(ingredientsOverview, HttpStatus.FOUND);
+        return new ResponseEntity<>(ingredientsOverview, HttpStatus.OK);
     }
 
 
