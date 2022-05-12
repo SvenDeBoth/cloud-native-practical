@@ -1,5 +1,6 @@
 package com.ezgroceries.shoppinglist;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,9 +16,14 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/cocktails", produces = "application/json")
 public class CocktailController {
-
+   // @Autowired
+   // private CocktailDBClient cocktailDBClient;
+    
     @GetMapping
     public ResponseEntity< List <CocktailResource>> get(@RequestParam String search) {
+        
+      //  CocktailDBResponse callResponse = cocktailDBClient.searchCocktails(search);
+       // System.out.println(callResponse.toString());
         return ResponseEntity.ok((getDummyResources()));
     }
 
