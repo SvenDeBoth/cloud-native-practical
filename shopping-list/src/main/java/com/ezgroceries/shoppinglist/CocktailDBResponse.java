@@ -14,12 +14,6 @@ public class CocktailDBResponse {
         this.drinks = drinks;
     }
 
-    @Override
-    public String toString() {
-        return "CocktailDBResponse{" +
-                "drinks=" + drinks +
-                '}';
-    }
 
     public static class DrinkResource {
         private String idDrink;

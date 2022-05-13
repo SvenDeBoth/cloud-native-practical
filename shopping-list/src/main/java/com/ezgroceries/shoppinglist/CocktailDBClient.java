@@ -1,4 +1,4 @@
-package com.ezgroceries.shoppinglist;
+/*package com.ezgroceries.shoppinglist;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -14,3 +14,5 @@ public interface CocktailDBClient {
 
 
 }
+
+ */
