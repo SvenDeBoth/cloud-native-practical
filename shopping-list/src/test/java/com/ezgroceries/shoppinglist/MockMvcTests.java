@@ -35,14 +35,14 @@ public class MockMvcTests {
 
 	@Test
 	public void getCocktailListTest() throws Exception {
-		int expectedNumberOfAccounts = 2;
+		int expectedNumberOfCocktails = 7;
 		
 		this.mockMvc //
 				.perform(get("/cocktails?search=Russian") //
 						.accept(MediaType.parseMediaType("application/json"))) //
 				.andExpect(status().isOk()) //
 				.andExpect(content().contentType("application/json"))
-				.andExpect(jsonPath("$.length()").value(expectedNumberOfAccounts));
+				.andExpect(jsonPath("$.length()").value(expectedNumberOfCocktails));
 	}
 
 

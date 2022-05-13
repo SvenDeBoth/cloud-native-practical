@@ -1,6 +1,7 @@
 package com.ezgroceries.shoppinglist;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -16,15 +17,23 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/cocktails", produces = "application/json")
 public class CocktailController {
-   // @Autowired
-   // private CocktailDBClient cocktailDBClient;
+    @Autowired
+    private CocktailDBClient cocktailDBClient;
     
     @GetMapping
     public ResponseEntity< List <CocktailResource>> get(@RequestParam String search) {
         
-      //  CocktailDBResponse callResponse = cocktailDBClient.searchCocktails(search);
-       // System.out.println(callResponse.toString());
-        return ResponseEntity.ok((getDummyResources()));
+        CocktailDBResponse callResponse = cocktailDBClient.searchCocktails(search);
+        //System.out.println(callResponse.toString());
+        List<CocktailResource> cocktailResourceList = new ArrayList<CocktailResource>();
+// loop over call response , add to list cocktailresource
+        for(int i=0;i <callResponse.getDrinks().size();i++){
+        CocktailResource singleCocktailResource = new CocktailResource(UUID.randomUUID(),callResponse.getDrinks().get(i).getStrDrink(),callResponse.getDrinks().get(i).getStrGlass(),callResponse.getDrinks().get(i).getStrInstructions(),callResponse.getDrinks().get(i).getStrDrinkThumb(),callResponse.getDrinks().get(i).getIngredientsList());
+        //System.out.println(singleCocktailResource.toString());
+
+        cocktailResourceList.add(singleCocktailResource);
+        }
+        return ResponseEntity.ok(cocktailResourceList);
     }
 
     public static List<CocktailResource> getDummyResources() {
