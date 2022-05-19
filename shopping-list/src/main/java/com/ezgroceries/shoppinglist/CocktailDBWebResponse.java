@@ -3,7 +3,7 @@ package com.ezgroceries.shoppinglist;
 import java.util.Arrays;
 import java.util.List;
 
-public class CocktailDBResponse {
+public class CocktailDBWebResponse {
 
     private List<DrinkResource> drinks;
 

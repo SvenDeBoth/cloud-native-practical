@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
 @FeignClient(name = "cocktailDBClient", url = "https://www.thecocktaildb.com/api/json/v1/1")
-public interface CocktailDBClient {
+public interface CocktailDBWebClient {
 
     @GetMapping(value = "search.php")
-    CocktailDBResponse searchCocktails(@RequestParam("s") String search);
+    CocktailDBWebResponse searchCocktails(@RequestParam("s") String search);
 
 
 }

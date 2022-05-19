@@ -1,11 +1,11 @@
-create table COCKTAIL_SHOPPING_LIST (
-                               COCKTAIL_ID UUID ,
-                               SHOPPING_LIST_ID UUID,
+create table SHOPPING_LIST_COCKTAILS (
+                               COCKTAILS_ID UUID ,
+                               SHOPPING_LIST_ENTITY_ID UUID,
 
                                    CONSTRAINT FK_COCKTAIL
-                                   FOREIGN KEY(COCKTAIL_ID)
+                                   FOREIGN KEY(COCKTAILS_ID)
                                    REFERENCES COCKTAIL(ID),
                                CONSTRAINT FK_SHOPPINGLIST
-                                   FOREIGN KEY(SHOPPING_LIST_ID)
+                                   FOREIGN KEY(SHOPPING_LIST_ENTITY_ID)
                                        REFERENCES SHOPPING_LIST(ID)
 );

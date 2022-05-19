@@ -9,31 +9,56 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/cocktails", produces = "application/json")
 public class CocktailController {
     @Autowired
-    private CocktailDBClient cocktailDBClient;
-    
+    private CocktailDBWebClient cocktailDBWebClient;
+    @Autowired private CocktailService cocktailService;
     @GetMapping
-    public ResponseEntity< List <CocktailResource>> get(@RequestParam String search) {
-        
-        CocktailDBResponse callResponse = cocktailDBClient.searchCocktails(search);
+    public ResponseEntity< List <CocktailEntity>> get(@RequestParam String search) {
+        // collect from website
+        CocktailDBWebResponse callResponse = cocktailDBWebClient.searchCocktails(search);
         //System.out.println(callResponse.toString());
-        List<CocktailResource> cocktailResourceList = new ArrayList<CocktailResource>();
+        List<CocktailEntity> cocktailEntityList = new ArrayList<CocktailEntity>();
+        System.out.println(callResponse.getDrinks().size());
+
 // loop over call response , add to list cocktailresource
         for(int i=0;i <callResponse.getDrinks().size();i++){
-        CocktailResource singleCocktailResource = new CocktailResource(UUID.randomUUID(),callResponse.getDrinks().get(i).getStrDrink(),callResponse.getDrinks().get(i).getStrGlass(),callResponse.getDrinks().get(i).getStrInstructions(),callResponse.getDrinks().get(i).getStrDrinkThumb(),callResponse.getDrinks().get(i).getIngredientsList());
+
+            System.out.println("adding "+ i);
+
+
+            // Transform data and add to outputlist of db
+        CocktailEntity singleCocktailEntity = new CocktailEntity();
+            singleCocktailEntity.setCocktailId(UUID.randomUUID());
+            singleCocktailEntity.setName(callResponse.getDrinks().get(i).getStrDrink());
+            singleCocktailEntity.setId_drink(callResponse.getDrinks().get(i).getIdDrink());
+            singleCocktailEntity.setGlass(callResponse.getDrinks().get(i).getStrGlass());
+            singleCocktailEntity.setImage(callResponse.getDrinks().get(i).getStrDrinkThumb());
+            singleCocktailEntity.setInstructions(callResponse.getDrinks().get(i).getStrInstructions());
+            singleCocktailEntity.setIngredients(new HashSet<>(callResponse.getDrinks().get(i).getIngredientsList()));
+         //   ,,,,,);
         //System.out.println(singleCocktailResource.toString());
 
-        cocktailResourceList.add(singleCocktailResource);
+            cocktailEntityList.add(singleCocktailEntity);
+            // check if exist in db ,
+            List<CocktailEntity> cocktailFromDB =  cocktailService.findByDrinkId(callResponse.getDrinks().get(i).getIdDrink()) ;
+            if (cocktailFromDB.size() == 0)
+                { // if not found , add to database
+                    System.out.println("adding to database");
+                           cocktailService.saveCocktail(singleCocktailEntity);
+                }
+
+
+
+
         }
-        return ResponseEntity.ok(cocktailResourceList);
+
+        // return data from database
+        return ResponseEntity.ok(cocktailEntityList);
     }
 
     public static List<CocktailResource> getDummyResources() {
