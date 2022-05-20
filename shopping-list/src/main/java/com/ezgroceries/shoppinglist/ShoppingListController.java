@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
 @RestController
 public class ShoppingListController {
     @Autowired private ShoppingListService shoppingListService;
-    @Autowired private CocktailService cocktailService;
+
     @GetMapping(value = "/shopping-lists", produces = "application/json")
     public ResponseEntity<?> listShoppingList(@RequestParam(required = false) String search) {
         if (search != null)
         {
-            System.out.println(" request param --> getdummyresources");
+            System.out.println(" request param --> getsingleshoppinglist");
             return ResponseEntity.ok(searchShoppingList(UUID.fromString(search)));
         }
         else
@@ -27,7 +27,7 @@ public class ShoppingListController {
 
             for (int i=0;i <allShoppingLists.size();i++)
             {
-                allShoppingIngredientsLists.add(searchShoppingListLogic(allShoppingLists.get(i).getShoppingListID()));
+                allShoppingIngredientsLists.add(shoppingListService.searchShoppingListLogic(allShoppingLists.get(i).getShoppingListID()));
 
             }
 
@@ -35,43 +35,12 @@ public class ShoppingListController {
         }
 
     }
-public ShoppingListIngredients searchShoppingListLogic(UUID uuid) {
-    // loop all coctails + ingredients , store all ingredients in ingredientsOverview
-    // uuid = shoppinglist UUID
-    // list all names of coctailingredients , output shopplinglistid , name , ingredients
-    // System.out.println(shoppingLists.toString());
-    ShoppingListEntity shoppingList = shoppingListService.getShoppingListById(uuid);
-    // System.out.println(uuid);
-    ShoppingListIngredients ingredientsOverview = new ShoppingListIngredients();
-    ingredientsOverview.setShoppingListID(shoppingList.getShoppingListID());
 
-    ingredientsOverview.setshoppingListName(shoppingList.getName());
-
-    System.out.println(shoppingList.getCocktails().size());
-    // System.out.println(CocktailController.getDummyResources().size());
-    int k = 0;
-    for (int i = 0; i < shoppingList.getCocktails().size(); i++) {
-        // shoppingList.get(i).getCocktails() --> uuid of cocktails
-        List<CocktailEntity> cocktailList = new ArrayList<>(shoppingList.getCocktails());
-
-        for (int j = 0; j < cocktailList.size(); j++) {
-            ingredientsOverview.getcocktailIngredients().addAll(cocktailList.get(j).getIngredients());
-
-        }
-        List<String> ingredientsWithoutDup = ingredientsOverview.getcocktailIngredients().stream()
-                .distinct()
-                .collect(Collectors.toList());
-        ingredientsOverview.getcocktailIngredients().clear();
-        ingredientsOverview.getcocktailIngredients().addAll(ingredientsWithoutDup);
-
-    }
-    return(ingredientsOverview);
-}
     @GetMapping(value = "/shopping-lists/{uuid}", produces = "application/json")
     public ResponseEntity<ShoppingListIngredients> searchShoppingList(@PathVariable("uuid") UUID uuid) {
 
 
-        return new ResponseEntity<>(searchShoppingListLogic(uuid), HttpStatus.OK);
+        return new ResponseEntity<>(shoppingListService.searchShoppingListLogic(uuid), HttpStatus.OK);
     }
 
 
@@ -98,40 +67,10 @@ public ShoppingListIngredients searchShoppingListLogic(UUID uuid) {
     @PostMapping(value = "/shopping-lists/{uuid}/cocktails")
     @JsonView(value = CocktailEntityView.CocktailView.Post.class)
     public ResponseEntity<List<CocktailEntity>> addCocktails(@PathVariable("uuid") UUID uuid, @RequestBody List<CocktailEntity> cocktailIds) {
-        ShoppingListEntity shoppingList = shoppingListService.getShoppingListById(uuid);
-        //shoppingList.setCocktails(new HashSet<>(cocktailIds));
-        List<CocktailEntity> cocktailList = new ArrayList<>(shoppingList.getCocktails());
-      //  Map<String, UUID> result = new HashMap<String,UUID>();
-          for(int i=0;i <cocktailIds.size();i++){
-        //  System.out.println(shoppingList.getName());
-        //  System.out.println(uuid);
-        //  System.out.println(shoppingList.getShoppingListID());
-        //  System.out.println(cocktailIds.get(i).toString());
-        //  System.out.println(cocktailIds.get(i).getCocktailId());
-              //cocktailIds.get(i).getCocktailId()
-              //shoppingList.getCocktails(i).
-              Boolean found = false;
-              for(int j=0;j <cocktailList.size();j++) {
-                  System.out.println(cocktailIds.get(i).getCocktailId().toString());
-                  System.out.println(cocktailList.get(j).getCocktailId().toString());
-                  if (cocktailIds.get(i).getCocktailId().toString().equals(cocktailList.get(j).getCocktailId().toString()) ){
-                      found = true;
-                      break;
 
-                  }
-              }
-              if (found == false)
-              {System.out.println(cocktailIds.get(i).getCocktailId() + "added in list");
-                  shoppingList.getCocktails().add(cocktailIds.get(i));
-              }
-              else
-              { System.out.println(cocktailIds.get(i).getCocktailId() + "already in list");}
-
-
-                }
-        shoppingListService.updateShoppingList(shoppingList, uuid);
-
-        return new ResponseEntity<>(cocktailIds, HttpStatus.CREATED);
+        ShoppingListEntity shoppingList = shoppingListService.addCocktails(uuid,cocktailIds);
+        List<CocktailEntity> cocktailIdsResult = new ArrayList<>(shoppingList.getCocktails());
+        return new ResponseEntity<>(cocktailIdsResult, HttpStatus.CREATED);
     }
 
 

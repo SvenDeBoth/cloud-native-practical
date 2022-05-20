@@ -16,6 +16,7 @@ public interface CocktailService {
     CocktailEntity updateCocktail(CocktailEntity cocktail,
                                 UUID cocktailId);
     List<CocktailEntity> findByDrinkId(String chars);
+    List<CocktailEntity> findByNameContainingIgnoreCase(String name);
     // Delete operation
 
 

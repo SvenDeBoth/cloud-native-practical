@@ -20,4 +20,8 @@ public interface ShoppingListService {
 
     // Delete operation
     void deleteShoppingListById(UUID shoppingListId);
+
+    ShoppingListIngredients searchShoppingListLogic(UUID uuid);
+
+    ShoppingListEntity addCocktails(UUID uuid, List<CocktailEntity> cocktailIds);
 }

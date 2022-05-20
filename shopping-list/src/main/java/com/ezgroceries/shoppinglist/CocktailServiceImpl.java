@@ -37,6 +37,12 @@ public class CocktailServiceImpl implements CocktailService{
         return (List<CocktailEntity>)
                 cocktailRepository.findByDrinkId(chars);
     };
+    @Override
+    public List<CocktailEntity> findByNameContainingIgnoreCase(String name)
+    {
+        return (List<CocktailEntity>)
+                cocktailRepository.findByNameContainingIgnoreCase(name);
+    };
     // Update operation
 
     @Override
