@@ -42,7 +42,6 @@ public class CocktailController {
             System.out.println(callResponse.getDrinks().get(i).getIngredientsList());
             System.out.println(callResponse.getDrinks().get(i).toString());
             singleCocktailEntity.setIngredients(new HashSet<>(callResponse.getDrinks().get(i).getIngredientsList()));
-         //   ,,,,,);
         //System.out.println(singleCocktailResource.toString());
 
             cocktailEntityList.add(singleCocktailEntity);
