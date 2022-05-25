@@ -10,11 +10,12 @@ public class ShoppingListIngredients {
     private String shoppingListName;
 
     private List<String> cocktailIngredients = new ArrayList<>();
-
-    public ShoppingListIngredients(UUID shoppingListID, String shoppingListName, List<String> cocktailIngredients) {
+    private String uid_create;
+    public ShoppingListIngredients(UUID shoppingListID, String shoppingListName, List<String> cocktailIngredients , String uid_create) {
         this.shoppingListID = shoppingListID;
         this.shoppingListName = shoppingListName;
         this.cocktailIngredients = cocktailIngredients;
+        this.uid_create = uid_create;
     }
 
     public ShoppingListIngredients() {
@@ -45,4 +46,11 @@ public class ShoppingListIngredients {
         this.cocktailIngredients = cocktailIngredients;
     }
 
+    public String getUid_create() {
+        return uid_create;
+    }
+
+    public void setUid_create(String uid_create) {
+        this.uid_create = uid_create;
+    }
 }

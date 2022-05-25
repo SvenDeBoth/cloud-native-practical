@@ -19,6 +19,9 @@ public class ShoppingListEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "uid_create", nullable = false)
+    private String uid_create;
+
     @ManyToMany(fetch = FetchType.EAGER , cascade = CascadeType.PERSIST)
     @JoinTable(name = "SHOPPING_LIST_COCKTAILS", joinColumns = @JoinColumn(name = "shopping_list_entity_id"),inverseJoinColumns = @JoinColumn(name = "COCKTAILS_ID"))
     private Set<CocktailEntity> cocktails = new HashSet<>();

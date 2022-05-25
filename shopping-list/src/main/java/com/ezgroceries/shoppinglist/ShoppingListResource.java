@@ -10,12 +10,15 @@ public class ShoppingListResource {
 
     private String name;
 
+    private String uid_create;
+
     private List<UUID> cocktails = new ArrayList<>();
 
-    public ShoppingListResource(UUID shoppingListID, String name, List<UUID> cocktails) {
+    public ShoppingListResource(UUID shoppingListID, String name, List<UUID> cocktails, String uid_create) {
         this.shoppingListID = shoppingListID;
         this.name = name;
         this.cocktails = cocktails;
+        this.uid_create = uid_create;
     }
 
     public UUID getShoppingListID() {
@@ -42,4 +45,11 @@ public class ShoppingListResource {
         this.cocktails = cocktails;
     }
 
+    public String getUid_create() {
+        return uid_create;
+    }
+
+    public void setUid_create(String uid_create) {
+        this.uid_create = uid_create;
+    }
 }

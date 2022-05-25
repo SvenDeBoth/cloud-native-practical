@@ -1,6 +1,7 @@
 package com.ezgroceries.shoppinglist;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class ShoppingListServiceImpl implements ShoppingListService{
 
     // Read operation
     @Override
+
     public List<ShoppingListEntity> fetchShoppingListList()
     {
         return (List<ShoppingListEntity>)
@@ -98,13 +100,14 @@ public ShoppingListEntity addCocktails(UUID uuid, List<CocktailEntity> cocktailI
         // uuid = shoppinglist UUID
         // list all names of coctailingredients , output shopplinglistid , name , ingredients
         // System.out.println(shoppingLists.toString());
+
         ShoppingListEntity shoppingList = getShoppingListById(uuid);
         // System.out.println(uuid);
         ShoppingListIngredients ingredientsOverview = new ShoppingListIngredients();
         ingredientsOverview.setShoppingListID(shoppingList.getShoppingListID());
 
         ingredientsOverview.setshoppingListName(shoppingList.getName());
-
+        ingredientsOverview.setUid_create(shoppingList.getUid_create());
         System.out.println(shoppingList.getCocktails().size());
         // System.out.println(CocktailController.getDummyResources().size());
         int k = 0;
